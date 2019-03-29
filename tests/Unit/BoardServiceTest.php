@@ -49,6 +49,50 @@ class BoardServiceTest extends TestCase
 
 
     public function testAddWrongItemToBoard(){
+        $boardService=new BoardService();
+        $board=$boardService->createBoard();
 
+        try{
+            $newBoard=$boardService->addToBoard($board,"A",1,2);
+            $this->assertEquals("",$newBoard[1][2]);
+        }
+        catch(BadIndexException $e){
+            $this->assertNull($e);
+        }
+        catch(InvalidCharacterException $e){
+            $this->assertNotNull($e);
+        }
+    }
+
+    public function testAddWrongXIndex(){
+        $boardService=new BoardService();
+        $board=$boardService->createBoard();
+
+        try{
+            $newBoard=$boardService->addToBoard($board,"O",3,2);
+            $this->assertEquals("",$newBoard[1][2]);
+        }
+        catch(BadIndexException $e){
+            $this->assertNotNull($e);
+        }
+        catch(InvalidCharacterException $e){
+            $this->assertNull($e);
+        }
+    }
+
+    public function testAddWrongYIndex(){
+        $boardService=new BoardService();
+        $board=$boardService->createBoard();
+
+        try{
+            $newBoard=$boardService->addToBoard($board,"O",1,3);
+            $this->assertEquals("",$newBoard[1][2]);
+        }
+        catch(BadIndexException $e){
+            $this->assertNotNull($e);
+        }
+        catch(InvalidCharacterException $e){
+            $this->assertNull($e);
+        }
     }
 }
