@@ -6,7 +6,7 @@
  * Time: 14:19
  */
 
-namespace App\Repository;
+namespace App\Repository\Contracts;
 
 
 interface RepositoryInterface
@@ -16,6 +16,8 @@ interface RepositoryInterface
     public function paginate($perPage = 15, $columns = array('*'));
 
     public function create(array $data);
+
+    public function firstOrCreate(array $data);
 
     public function update(array $data, $id);
 

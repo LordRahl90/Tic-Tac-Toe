@@ -21,6 +21,9 @@ class CreateMovesTable extends Migration
             $table->integer('y_index');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('player_id')->references('id')->on('players');
         });
     }
 

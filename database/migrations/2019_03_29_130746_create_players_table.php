@@ -20,6 +20,9 @@ class CreatePlayersTable extends Migration
             $table->string('character');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('game_id')->references('id')->on('games');
         });
     }
 

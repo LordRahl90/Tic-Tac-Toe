@@ -21,6 +21,10 @@ class CreateGameResultsTable extends Migration
             $table->enum('status',['WIN','DRAW','LOST']);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('player_id')->references('id')->on('players');
         });
     }
 
