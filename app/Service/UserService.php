@@ -31,6 +31,14 @@ class UserService
     }
 
 
+    /**
+     * @param $fullname
+     * @param $email
+     * @param $character
+     * @param $computerCharacter
+     * @return mixed
+     * @throws GameException
+     */
     public function startGame($fullname,$email,$character,$computerCharacter){
         $newUser=$this->userRepository->firstOrCreate([
             'email'=>$email,
@@ -54,6 +62,9 @@ class UserService
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getComputer(){
         return $this->userRepository->find(1);
     }

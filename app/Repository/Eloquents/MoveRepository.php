@@ -14,10 +14,17 @@ use App\Repository\Repository;
 
 class MoveRepository extends Repository
 {
-    function model()
+    public function model()
     {
         return Move::class;
     }
+
+    public function whereRaw($query,$data=[]){
+        return $this->model->whereRaw($query,$data)->get();
+    }
+
+
+
 
 
 }

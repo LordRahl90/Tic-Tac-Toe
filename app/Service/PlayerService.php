@@ -11,20 +11,24 @@ namespace App\Service;
 
 use App\Repository\Eloquents\PlayerRepository;
 use App\Service\Exceptions\BadIndexException;
+use Illuminate\Support\Facades\Log;
 
 class PlayerService
 {
 
     protected $playerRepository;
     protected $boardService;
+    protected $moveService;
 
     public function __construct(
         PlayerRepository $playerRepository,
-        BoardService $boardService
+        BoardService $boardService,
+        MoveService $moveService
     )
     {
         $this->playerRepository=$playerRepository;
         $this->boardService=$boardService;
+        $this->moveService=$moveService;
     }
 
     /**
@@ -53,16 +57,26 @@ class PlayerService
      * @param $x
      * @param $y
      * @param MoveService $moveService
+     * @throws \Exception
      */
-    public function makeMove($playerId,$x,$y,MoveService $moveService){
+    public function makeMove($playerId,$x,$y){
         $player=$this->playerRepository->find($playerId);
-        $character=$playerId->character;
+        $character=$player->character;
 
         try{
-            $moveService->move($player->game_id,$player->id,$x,$y,$character);
+            $this->moveService->move($player->game_id,$player->id,$x,$y,$character);
         }
         catch(\Exception $ex){
-            throw new Exception($ex->getMessage());
+            throw new \Exception($ex->getMessage());
         }
+    }
+
+
+    /**
+     * @param $gameID
+     * @return mixed
+     */
+    public function getBotPlayer($gameID){
+        return $this->playerRepository->findBy('game_id',$gameID)->where('user_id',1)->first();
     }
 }

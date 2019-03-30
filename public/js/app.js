@@ -186,30 +186,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      board: [["", "", ""], ["", "", ""], ["", "", ""]]
+      board: []
     };
   },
   methods: {
     updateBoard: function updateBoard(x, y) {
-      var board = this.board;
+      var player = this.$store.getters.getPlayer;
+      var currentBoard = this.board;
+      var self = this; // currentBoard[x][y]=player.character;
 
-      if (board[x][y] !== "") {
-        console.log("Invalid Box clicked");
-        return;
-      }
+      currentBoard[x][y] = 'O';
+      this.$set(this.board[x], y, 'X'); //lets send the coord out.
 
-      var newBoard = [["", "O", ""], ["X", "", ""], ["", "", "O"]]; // console.log('Board Updated '+x+y);
-      // this.board[x][y]='X';
-
-      this.$set(this.board[x], y, 'X');
-      console.log('board updated');
+      axios.post('/api/v1/move', {
+        'player_id': 1,
+        'x': x,
+        'y': y,
+        'board': currentBoard
+      }).then(function (responseData) {
+        console.log(responseData.data.data.board);
+        self.$store.dispatch('updateBoardAction', responseData.data.data.board);
+        self.$set(self.$store.getters.getBoardState);
+      });
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getBoardState"]))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getBoardState"])),
+  mounted: function mounted() {
+    this.board = this.$store.getters.getBoardState;
+  }
 });
 
 /***/ }),
@@ -1566,7 +1578,9 @@ var render = function() {
             ]
           )
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _vm._m(2)
     ])
   ])
 }
@@ -1590,6 +1604,22 @@ var staticRenderFns = [
           _vm._v("Your Character is: ")
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
+        _vm._v("Restart")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-danger", attrs: { type: "button" } },
+        [_vm._v("Restart")]
+      )
     ])
   }
 ]
@@ -17982,7 +18012,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       character: '',
       player_id: ''
     },
-    board: {}
+    board: [["", "", ""], ["", "", ""], ["", "", ""]]
   },
   getters: {
     getBoardState: function getBoardState(state) {

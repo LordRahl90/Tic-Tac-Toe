@@ -9,7 +9,9 @@
 namespace App\Service;
 
 
+use App\Models\Move;
 use App\Repository\Eloquents\MoveRepository;
+use Illuminate\Support\Facades\Log;
 
 class MoveService
 {
@@ -33,8 +35,9 @@ class MoveService
      * @throws \Exception
      */
     public function move($gameID,$playerID,$x,$y,$character){
-        $checkResult=$this->moveRepository->model()->where('game_id',$gameID)->where('x_index',$x)->where('y_index',$y)->get();
+        $checkResult=$this->moveRepository->whereRaw('game_id=? and x_index=? and y_index=?',[$gameID,$playerID,$x,$y]);
         if(count($checkResult)>0){
+            Log::info($checkResult);
             throw new \Exception("Invalid Move");
         }
 
@@ -43,7 +46,8 @@ class MoveService
             'player_id'=>$playerID,
             'x_index'=>$x,
             'y_index'=>$y,
-            'character'=>$character
+            'character'=>$character,
+            'status'=>false
         ]);
 
         if(!$newMove){

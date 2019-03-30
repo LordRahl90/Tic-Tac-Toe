@@ -12,9 +12,11 @@ export const store=new Vuex.Store({
             character:'',
             player_id:''
         },
-        board:{
-
-        }
+        board:[
+            ["","",""],
+            ["","",""],
+            ["","",""],
+        ]
     },
     getters:{
         getBoardState: function(state){

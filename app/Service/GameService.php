@@ -16,6 +16,7 @@ class GameService
     protected $gameRepository;
     protected $boardService;
 
+
     public function __construct(GameRepository $gameRepository,BoardService $boardService)
     {
         $this->gameRepository=$gameRepository;
@@ -39,6 +40,15 @@ class GameService
         }
 
         return $newGame;
+    }
+
+
+    /**
+     * @param $gameID
+     * @return mixed
+     */
+    public function getPlayers($gameID){
+        return $this->gameRepository->find($gameID)->players;
     }
 
 

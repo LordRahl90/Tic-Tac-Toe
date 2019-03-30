@@ -62,10 +62,14 @@ class BoardService
     }
 
 
+    /**
+     * @param $board
+     * @return bool
+     */
     public function isBoardFilled($board){
         foreach ($board as $i=>$x){
             foreach($board[$i] as $j=>$y){
-                if($board[$i][$j]===""){
+                if($board[$i][$j]==="" || $board[$i][$j]==null ){
                     return false;
                 }
             }
@@ -73,6 +77,11 @@ class BoardService
         return true;
     }
 
+
+    /**
+     * @param $board
+     * @return array
+     */
     public function verifyWinning($board){
         $diagonal=[];
         $reverseDiagonal=[];
@@ -89,14 +98,14 @@ class BoardService
                 if($i==$j){
                     $diagonal[]=$item;
                 }
-                if($i+$j==2){
+                if($i+$j===count($board[$i])){
                     $reverseDiagonal[]=$item;
                 }
             }
         }
 
         if(count(array_unique($diagonal))===1){
-            if($diagonal[0]!==""){
+            if($diagonal[0]!=="" && $diagonal[0]!==null){
                 return [
                     'found'=>true,
                     'winner'=>$diagonal[0]
@@ -105,7 +114,7 @@ class BoardService
         }
 
         if(count(array_unique($reverseDiagonal))===1){
-            if($reverseDiagonal[0]!==""){
+            if($reverseDiagonal[0]!=="" && $reverseDiagonal[0]!==null){
                 return[
                     'found'=>true,
                     'winner'=>$reverseDiagonal[0]
@@ -115,7 +124,7 @@ class BoardService
 
         foreach ($rows as $r){
             if(count(array_unique($r))===1){
-                if($r[0]!==""){
+                if($r[0]!=="" && $r[0]!==null){
                     return [
                         'found'=>true,
                         'winner'=>$r[0]
@@ -126,7 +135,7 @@ class BoardService
 
         foreach ($cols as $c){
             if(count(array_unique($c))===1){
-                if($c[0]!==""){
+                if($c[0]!=="" && $c[0]!==null){
                     return [
                         'found'=>true,
                         'winner'=>$c[0]

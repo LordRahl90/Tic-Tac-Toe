@@ -22,6 +22,7 @@ class CreateMovesTable extends Migration
             $table->string('character');
             $table->boolean('status');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('game_id')->references('id')->on('games');
             $table->foreign('player_id')->references('id')->on('players');

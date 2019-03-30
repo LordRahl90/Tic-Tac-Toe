@@ -10,4 +10,8 @@ class Game extends Model
     use SoftDeletes;
 
     public $guarded=['deleted_at'];
+
+    public function players(){
+        return $this->hasMany(Player::class);
+    }
 }

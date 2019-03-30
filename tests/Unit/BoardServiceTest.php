@@ -131,6 +131,46 @@ class BoardServiceTest extends TestCase
         ];
 
         $result=$boardService->verifyWinning($board);
-        Log::info($result);
+        $this->assertTrue($result['found']);
+        $this->assertEquals("O",$result['winner']);
+    }
+
+    public function testVerifyRowWinning(){
+        $boardService=new BoardService();
+        $board=[
+            ["O","X","O"],
+            ["X","O","O"],
+            ["X","X","X"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        $this->assertTrue($result['found']);
+        $this->assertEquals("X",$result['winner']);
+    }
+
+
+    public function testVerifyColumnWinning(){
+        $boardService=new BoardService();
+        $board=[
+            ["X","X","O"],
+            ["O","X","X"],
+            ["O","X","O"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        $this->assertTrue($result['found']);
+        $this->assertEquals("X",$result['winner']);
+    }
+
+    public function testVerifyNoWin(){
+        $boardService=new BoardService();
+        $board=[
+            ["O","X","O"],
+            ["O","X","X"],
+            ["X","O","O"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        $this->assertFalse($result['found']);
     }
 }

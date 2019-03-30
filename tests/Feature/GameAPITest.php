@@ -80,4 +80,51 @@ class GameAPITest extends TestCase
         $this->assertFalse($data->success);
         Log::info($data->message);
     }
+
+
+    public function testMakeWinningMove(){
+        $board=[
+            ["X","X","O"],
+            ["O","X","X"],
+            ["O","X","O"]
+        ];
+
+        $faker=Factory::create();
+        $response=$this->json('POST','/api/v1/move',[
+            'board'=>$board,
+            'player_id'=>1,
+            'x'=>$faker->numberBetween(0,2),
+            'y'=>$faker->numberBetween(0,2)
+        ]);
+
+        $response->assertStatus(200);
+
+        $responseData=json_decode($response->content());
+        Log::info($responseData->message);
+    }
+
+
+    public function testMakeEmptyMove(){
+        $board=[
+            ["X","","O"],
+            ["O","",""],
+            ["","","O"]
+        ];
+
+        $faker=Factory::create();
+        $response=$this->json('POST','/api/v1/move',[
+            'board'=>$board,
+            'player_id'=>1,
+            'x'=>$faker->numberBetween(0,2),
+            'y'=>$faker->numberBetween(0,2)
+        ]);
+
+        $response->assertStatus(200);
+
+        $responseData=json_decode($response->content());
+        $this->assertTrue($responseData->success);
+        $this->assertNotNull($responseData->data->board);
+        $this->assertEquals('Your Turn...',$responseData->message);
+        Log::info($responseData->message);
+    }
 }
