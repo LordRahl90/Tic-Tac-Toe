@@ -28,18 +28,27 @@ export const store=new Vuex.Store({
     },
     mutations:{
         updateUserMut: function (state,data) {
-            state.player=data;
+            state.player.fullname=data.fullname;
+            state.player.character=data.character;
+            state.player.player_id=data.player_id;
         },
         updateBoardMut: function(state,board){
             state.board=board;
+        },
+        updatePlayerIDMut: function(state,id){
+            state.player.player_id=id;
         }
     },
     actions:{
-        updateUserAction: function(context,data){
-            context.commit('updateUserMut',data);
+        updateUserAction: function(context,player){
+            console.log('mutation data ',player);
+            context.commit('updateUserMut',player);
         },
         updateBoardAction: function(context,data){
             context.commit('updateBoardMut',data);
+        },
+        changePlayerID: function (context,id) {
+            context.commit('updatePlayerIDMut',id);
         }
     }
 });

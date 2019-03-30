@@ -35,7 +35,7 @@ class MoveService
      * @throws \Exception
      */
     public function move($gameID,$playerID,$x,$y,$character){
-        $checkResult=$this->moveRepository->whereRaw('game_id=? and x_index=? and y_index=?',[$gameID,$playerID,$x,$y]);
+        $checkResult=$this->moveRepository->whereRaw('game_id=? and x_index=? and y_index=?',[$gameID,$x,$y]);
         if(count($checkResult)>0){
             Log::info($checkResult);
             throw new \Exception("Invalid Move");

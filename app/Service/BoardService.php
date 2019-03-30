@@ -98,7 +98,7 @@ class BoardService
                 if($i==$j){
                     $diagonal[]=$item;
                 }
-                if($i+$j===count($board[$i])){
+                if($i+$j===count($board[$i])-1){
                     $reverseDiagonal[]=$item;
                 }
             }
@@ -106,6 +106,7 @@ class BoardService
 
         if(count(array_unique($diagonal))===1){
             if($diagonal[0]!=="" && $diagonal[0]!==null){
+                Log::info("Diagonal win");
                 return [
                     'found'=>true,
                     'winner'=>$diagonal[0]
@@ -115,6 +116,7 @@ class BoardService
 
         if(count(array_unique($reverseDiagonal))===1){
             if($reverseDiagonal[0]!=="" && $reverseDiagonal[0]!==null){
+                Log::info("Reverse Diagonal win!");
                 return[
                     'found'=>true,
                     'winner'=>$reverseDiagonal[0]

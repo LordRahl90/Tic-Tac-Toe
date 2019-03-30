@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix'=>'v1'], function(){
    Route::post('start-game','GameAPIController@start');
    Route::post('move','GameAPIController@move');
+   Route::post('restart','GameAPIController@restart');
 });

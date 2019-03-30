@@ -8,7 +8,7 @@
             <div class="card-header">
                 <div class="card-title">
                     Welcome to Tic-Tac Toe.
-                    <span style="float: right">Your Character is: </span>
+                    <span style="float: right">Your Character is: {{ player.character }}</span>
                 </div>
             </div>
 
@@ -16,8 +16,8 @@
                 <div align="center">
                     <div style="width: 400px; max-height: 400px;">
                         <table border="1" align="center" width="100%" v-if="board.length>=2">
-                            <tr v-for="(row,i) in board">
-                                <td style="padding:20px; font-size: 30pt;" align="center" v-for="(item,j) in row" @click="updateBoard(i,j)">
+                            <tr v-for="(row,i) in board" :key="i">
+                                <td style="padding:20px; font-size: 30pt;" align="center" v-for="(item,j) in row" @click="updateBoard(i,j)" :key="j">
                                     {{ item }}
                                 </td>
                             </tr>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-info">Restart</button>
+                <button type="button" @click="restart()" class="btn btn-info">Restart</button>
                 <button type="button" class="btn btn-danger">Restart</button>
             </div>
         </div>
@@ -40,29 +40,66 @@
     export default {
         data:function(){
             return{
-                board:[]
+                player:'',
+                board:[],
+                componentIKey:0,
+                componentJKey:1
             };
         },
         methods:{
             updateBoard(x,y){
                 let player=this.$store.getters.getPlayer;
-                let currentBoard=this.board;
+                let currentBoard=this.$store.getters.getBoardState;
                 let self=this;
                 // currentBoard[x][y]=player.character;
-                currentBoard[x][y]='O';
-                this.$set(this.board[x],y,'X');
+                currentBoard[x][y]=player.character;
 
                 //lets send the coord out.
                 axios.post('/api/v1/move',{
-                    'player_id':1,
+                    'player_id':this.player.player_id,
                     'x':x,
                     'y':y,
                     'board':currentBoard
                 }).then(function(responseData){
                     console.log(responseData.data.data.board);
-                   self.$store.dispatch('updateBoardAction',responseData.data.data.board);
-                   self.$set(self.$store.getters.getBoardState);
+
+                    let data=responseData.data.data;
+
+
+                    self.$store.dispatch('updateBoardAction',responseData.data.data.board);
+                    self.board=self.$store.getters.getBoardState;
+                    // self.$forceUpdate();
+                    self.forceRenderer();
+
+                    if(data.finished){
+                        success(responseData.data.message);
+                        return;
+                    }
                 });
+            },
+            restart(){
+                let player=this.$store.getters.getPlayer;
+                let self=this;
+                axios.post('/api/v1/restart',{
+                    player:player
+                }).then(function(responseData){
+                    let appData=responseData.data;
+                    if(!appData.success){
+                        error(appData.message);
+                        return;
+                    }
+
+                    let respData=appData.data;
+                    //lets start updating.
+                    self.$store.dispatch('updateBoardAction',respData.board);
+                    self.board=self.$store.getters.getBoardState;
+                    self.$store.dispatch('changePlayerID',respData.player_id);
+                    console.log(respData.player_id);
+                });
+            },
+            forceRenderer(){
+                this.componentIKey+=1;
+                this.componentJKey+=1;
             }
         },
         computed:{
@@ -72,6 +109,16 @@
         },
         mounted() {
             this.board=this.$store.getters.getBoardState
+            let player=this.$store.getters.getPlayer;
+
+            if(player==null){
+                this.$router.push('/');
+            }
+
+            if(player.character===""){
+                this.$router.push('/');
+            }
+            this.player=player;
         }
     }
 </script>

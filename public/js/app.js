@@ -194,33 +194,79 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      board: []
+      player: '',
+      board: [],
+      componentIKey: 0,
+      componentJKey: 1
     };
   },
   methods: {
     updateBoard: function updateBoard(x, y) {
       var player = this.$store.getters.getPlayer;
-      var currentBoard = this.board;
+      var currentBoard = this.$store.getters.getBoardState;
       var self = this; // currentBoard[x][y]=player.character;
 
-      currentBoard[x][y] = 'O';
-      this.$set(this.board[x], y, 'X'); //lets send the coord out.
+      currentBoard[x][y] = player.character; //lets send the coord out.
 
       axios.post('/api/v1/move', {
-        'player_id': 1,
+        'player_id': this.player.player_id,
         'x': x,
         'y': y,
         'board': currentBoard
       }).then(function (responseData) {
         console.log(responseData.data.data.board);
+        var data = responseData.data.data;
         self.$store.dispatch('updateBoardAction', responseData.data.data.board);
-        self.$set(self.$store.getters.getBoardState);
+        self.board = self.$store.getters.getBoardState; // self.$forceUpdate();
+
+        self.forceRenderer();
+
+        if (data.finished) {
+          success(responseData.data.message);
+          return;
+        }
       });
+    },
+    restart: function restart() {
+      var player = this.$store.getters.getPlayer;
+      var self = this;
+      axios.post('/api/v1/restart', {
+        player: player
+      }).then(function (responseData) {
+        var appData = responseData.data;
+
+        if (!appData.success) {
+          error(appData.message);
+          return;
+        }
+
+        var respData = appData.data; //lets start updating.
+
+        self.$store.dispatch('updateBoardAction', respData.board);
+        self.board = self.$store.getters.getBoardState;
+        self.$store.dispatch('changePlayerID', respData.player_id);
+        console.log(respData.player_id);
+      });
+    },
+    forceRenderer: function forceRenderer() {
+      this.componentIKey += 1;
+      this.componentJKey += 1;
     }
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getBoardState"])),
   mounted: function mounted() {
     this.board = this.$store.getters.getBoardState;
+    var player = this.$store.getters.getPlayer;
+
+    if (player == null) {
+      this.$router.push('/');
+    }
+
+    if (player.character === "") {
+      this.$router.push('/');
+    }
+
+    this.player = player;
   }
 });
 
@@ -299,7 +345,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     openGame: function openGame() {
       var self = this;
-      var url = 'http://localhost:8000/api/v1/start-game';
+      var url = '/api/v1/start-game';
       axios.post(url, this.player).then(function (responseData) {
         if (responseData.status != 201) {
           error(responseData.data.message);
@@ -307,16 +353,15 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         var data = responseData.data.data;
-        var playerInfo = {
+        var player = {
           fullname: data.fullname,
-          player_id: data.player_id
+          player_id: data.player_id,
+          character: self.player.character
         };
         var boardInfo = data.board;
-        console.log(playerInfo);
-        console.log(boardInfo); //we dispatch 2 actions
+        console.log(player); // console.log(boardInfo);
 
-        self.$store.dispatch('updateUserAction', playerInfo);
-        self.$store.dispatch('updateBoardAction', boardInfo);
+        self.$store.commit('updateUserMut', player);
         self.$router.push('/game');
       }).catch(function (e) {
         console.log(e);
@@ -1530,7 +1575,14 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _vm._m(1),
+      _c("div", { staticClass: "card-header" }, [
+        _c("div", { staticClass: "card-title" }, [
+          _vm._v("\n                Welcome to Tic-Tac Toe.\n                "),
+          _c("span", { staticStyle: { float: "right" } }, [
+            _vm._v("Your Character is: " + _vm._s(_vm.player.character))
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c("div", { attrs: { align: "center" } }, [
@@ -1545,10 +1597,12 @@ var render = function() {
                     _vm._l(_vm.board, function(row, i) {
                       return _c(
                         "tr",
+                        { key: i },
                         _vm._l(row, function(item, j) {
                           return _c(
                             "td",
                             {
+                              key: j,
                               staticStyle: {
                                 padding: "20px",
                                 "font-size": "30pt"
@@ -1580,7 +1634,27 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _c("div", { staticClass: "card-footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.restart()
+              }
+            }
+          },
+          [_vm._v("Restart")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-danger", attrs: { type: "button" } },
+          [_vm._v("Restart")]
+        )
+      ])
     ])
   ])
 }
@@ -1591,35 +1665,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "navbar" }, [
       _c("h1", [_vm._v("Welcome to Tic-Tac-Toe")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("div", { staticClass: "card-title" }, [
-        _vm._v("\n                Welcome to Tic-Tac Toe.\n                "),
-        _c("span", { staticStyle: { float: "right" } }, [
-          _vm._v("Your Character is: ")
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-footer" }, [
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
-        _vm._v("Restart")
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-danger", attrs: { type: "button" } },
-        [_vm._v("Restart")]
-      )
     ])
   }
 ]
@@ -18024,18 +18069,27 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   },
   mutations: {
     updateUserMut: function updateUserMut(state, data) {
-      state.player = data;
+      state.player.fullname = data.fullname;
+      state.player.character = data.character;
+      state.player.player_id = data.player_id;
     },
     updateBoardMut: function updateBoardMut(state, board) {
       state.board = board;
+    },
+    updatePlayerIDMut: function updatePlayerIDMut(state, id) {
+      state.player.player_id = id;
     }
   },
   actions: {
-    updateUserAction: function updateUserAction(context, data) {
-      context.commit('updateUserMut', data);
+    updateUserAction: function updateUserAction(context, player) {
+      console.log('mutation data ', player);
+      context.commit('updateUserMut', player);
     },
     updateBoardAction: function updateBoardAction(context, data) {
       context.commit('updateBoardMut', data);
+    },
+    changePlayerID: function changePlayerID(context, id) {
+      context.commit('updatePlayerIDMut', id);
     }
   }
 });

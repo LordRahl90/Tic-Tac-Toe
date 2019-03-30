@@ -56,7 +56,6 @@ class PlayerService
      * @param $playerId
      * @param $x
      * @param $y
-     * @param MoveService $moveService
      * @throws \Exception
      */
     public function makeMove($playerId,$x,$y){

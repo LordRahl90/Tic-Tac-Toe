@@ -41,6 +41,8 @@ class UserService
      */
     public function startGame($fullname,$email,$character,$computerCharacter){
         $newUser=$this->userRepository->firstOrCreate([
+            'email'=>$email
+        ],[
             'email'=>$email,
             'name'=>$fullname
         ]);

@@ -63,7 +63,7 @@
         methods:{
             openGame(){
                 let self=this;
-                let url='http://localhost:8000/api/v1/start-game';
+                let url='/api/v1/start-game';
                 axios.post(url,this.player).then(function(responseData){
                     if(responseData.status!=201){
                         error(responseData.data.message);
@@ -71,18 +71,17 @@
                     }
 
                     let data=responseData.data.data;
-                    let playerInfo={
+                    let player={
                         fullname: data.fullname,
-                        player_id:data.player_id
+                        player_id:data.player_id,
+                        character:self.player.character
                     };
                     let boardInfo=data.board;
 
-                    console.log(playerInfo);
-                    console.log(boardInfo);
+                    console.log(player);
+                    // console.log(boardInfo);
 
-                    //we dispatch 2 actions
-                    self.$store.dispatch('updateUserAction',playerInfo);
-                    self.$store.dispatch('updateBoardAction',boardInfo);
+                    self.$store.commit('updateUserMut',player);
                     self.$router.push('/game');
                 }).catch(e=>{
                     console.log(e);

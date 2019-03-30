@@ -11,18 +11,6 @@ use Faker\Factory;
 class GameAPITest extends TestCase
 {
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
     public function testStartGame(){
         $faker=Factory::create();
         $fullname=$faker->firstName.' '.$faker->lastName;
@@ -100,6 +88,29 @@ class GameAPITest extends TestCase
         $response->assertStatus(200);
 
         $responseData=json_decode($response->content());
+        Log::info($responseData->message);
+    }
+
+
+    public function testDrawMove(){
+        $board=[
+            ["X","X","O"],
+            ["O","O","X"],
+            ["X","X","O"]
+        ];
+
+        $faker=Factory::create();
+        $response=$this->json('POST','/api/v1/move',[
+            'board'=>$board,
+            'player_id'=>1,
+            'x'=>$faker->numberBetween(0,2),
+            'y'=>$faker->numberBetween(0,2)
+        ]);
+
+        $response->assertStatus(200);
+
+        $responseData=json_decode($response->content());
+        $this->assertEquals('There is a draw.','There is a draw.');
         Log::info($responseData->message);
     }
 

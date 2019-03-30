@@ -12,17 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BoardServiceTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
-
-
     public function testCreateBoard(){
         $boardService=new BoardService();
         $newBoard=$boardService->createBoard();
@@ -160,6 +149,34 @@ class BoardServiceTest extends TestCase
         $result=$boardService->verifyWinning($board);
         $this->assertTrue($result['found']);
         $this->assertEquals("X",$result['winner']);
+    }
+
+
+    public function testVerifyDiagonalWinning(){
+        $boardService=new BoardService();
+        $board=[
+            ["X","X","O"],
+            ["O","X","X"],
+            ["O","X","X"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        $this->assertTrue($result['found']);
+        $this->assertEquals("X",$result['winner']);
+    }
+
+    public function testVerifyReverseDiagonalWinning(){
+        $boardService=new BoardService();
+        $board=[
+            ["X","X","O"],
+            ["O","O","X"],
+            ["O","X","X"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        Log::info($result);
+        $this->assertTrue($result['found']);
+        $this->assertEquals("O",$result['winner']);
     }
 
     public function testVerifyNoWin(){

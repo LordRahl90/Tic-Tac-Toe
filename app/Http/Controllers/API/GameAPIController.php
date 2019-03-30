@@ -29,7 +29,7 @@ class GameAPIController extends AppBaseController
 
         $v=Validator::make($request->all(),[
             'fullname'=>'required',
-            'email'=>'required|email|unique:users,email',
+            'email'=>'required|email',
             'character'=>[
                 'required',
                 Rule::in(['O','X'])
@@ -57,7 +57,7 @@ class GameAPIController extends AppBaseController
                 'board'=>$board
             ];
 
-//            DB::commit();
+            DB::commit();
             return $this->sendResponse($response,'Game Started Successfully.',201);
         }
         catch(\Exception $ex){
@@ -80,6 +80,8 @@ class GameAPIController extends AppBaseController
             'board'=>'required'
         ]);
 
+        Log::info($request->all());
+
         if($v->fails()){
             return $this->sendError($v->messages()->all());
         }
@@ -87,7 +89,7 @@ class GameAPIController extends AppBaseController
         $board=$request->board;
         $player=$playerRepository->find($request->player_id);
 
-        Log::info($request->all());
+//        Log::info($request->all());
 
 
         DB::beginTransaction();
@@ -96,15 +98,18 @@ class GameAPIController extends AppBaseController
             $playerService->makeMove($player->id,$request->x,$request->y);
             //check if this move leads to winning.
             $winning=$boardService->verifyWinning($board);
+            Log::info($winning);
             if($winning['found']){
                 //means there is a winning
                 if($winning['winner']===$player->character){
                     return $this->sendResponse([
                         'finished'=>true,
+                        'board'=>$board
                     ],"You Win");
                 }else{
                     return $this->sendResponse([
                         'finished'=>true,
+                        'board'=>$board
                     ],"Computer Wins");
                 }
             }
@@ -112,7 +117,8 @@ class GameAPIController extends AppBaseController
             //lets check if there is more space to play.
             if($boardService->isBoardFilled($board)){
                 return $this->sendResponse([
-                    'finished'=>true
+                    'finished'=>true,
+                    'board'=>$board
                 ],"There is a draw.");
             }
 
@@ -130,10 +136,12 @@ class GameAPIController extends AppBaseController
                 if($winning['winner']===$player->character){
                     return $this->sendResponse([
                         'finished'=>true,
+                        'board'=>$newBoard
                     ],"You Win");
                 }else{
                     return $this->sendResponse([
                         'finished'=>true,
+                        'board'=>$newBoard
                     ],"Computer Wins");
                 }
             }
@@ -141,15 +149,16 @@ class GameAPIController extends AppBaseController
             //lets check if there is more space to play.
             if($boardService->isBoardFilled($newBoard)){
                 return $this->sendResponse([
-                    'finished'=>true
+                    'finished'=>true,
+                    'board'=>$newBoard
                 ],"There is a draw.");
             }
 
             $response=[
-                'finished'=>false,
                 'board'=>$newBoard
             ];
 
+            DB::commit();
             return $this->sendResponse($response,'Your Turn...');
         }
         catch (\Exception $ex){
@@ -157,5 +166,39 @@ class GameAPIController extends AppBaseController
             Log::info($ex);
             return $this->sendError($ex->getMessage(),500);
         }
+    }
+
+    public function restart(Request $request,
+                            PlayerRepository $playerRepository,
+                            UserService $userService,
+                            BoardService $boardService
+    ){
+        $v=Validator::make($request->only('player'),[
+           'player'=>"required"
+        ]);
+
+        if($v->fails()){
+            return $this->sendError($v->messages()->all());
+        }
+        $playerID=$request->player['player_id'];
+
+        $player=$playerRepository->find($playerID);
+        $user=$player->user;
+        $character=$player->character;
+        $computerXter=$character=='O'?'X':'O';
+       try{
+           $board=$boardService->createBoard();
+           $newPlayer=$userService->startGame($user->name,$user->email,$player->character,$computerXter);
+           $response=[
+               'player_id'=>$newPlayer->id,
+               'character'=>$newPlayer->character,
+               'board'=>$board
+           ];
+           return $this->sendResponse($response,'Game Restarted Successfully.');
+       }
+       catch (\Exception $ex){
+           Log::info($ex);
+           return $this->sendError($ex->getMessage(),500);
+       }
     }
 }
