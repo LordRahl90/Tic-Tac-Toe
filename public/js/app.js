@@ -149,14 +149,67 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "GamePage"
+  data: function data() {
+    return {
+      board: [["", "", ""], ["", "", ""], ["", "", ""]]
+    };
+  },
+  methods: {
+    updateBoard: function updateBoard(x, y) {
+      var board = this.board;
+
+      if (board[x][y] !== "") {
+        console.log("Invalid Box clicked");
+        return;
+      }
+
+      var newBoard = [["", "O", ""], ["X", "", ""], ["", "", "O"]]; // console.log('Board Updated '+x+y);
+      // this.board[x][y]='X';
+
+      this.$set(this.board[x], y, 'X');
+      console.log('board updated');
+    }
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getBoardState"]))
 });
 
 /***/ }),
@@ -214,11 +267,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      player: {
+        email: '',
+        fullname: '',
+        character: ''
+      }
+    };
   },
-  methods: {}
+  methods: {
+    openGame: function openGame() {
+      var self = this;
+      var url = 'http://localhost:8000/api/v1/start-game';
+      axios.post(url, this.player).then(function (responseData) {
+        if (responseData.status != 201) {
+          error(responseData.data.message);
+          return;
+        }
+
+        var data = responseData.data.data;
+        var playerInfo = {
+          fullname: data.fullname,
+          player_id: data.player_id
+        };
+        var boardInfo = data.board;
+        console.log(playerInfo);
+        console.log(boardInfo); //we dispatch 2 actions
+
+        self.$store.dispatch('updateUserAction', playerInfo);
+        self.$store.dispatch('updateBoardAction', boardInfo);
+        self.$router.push('/game');
+      }).catch(function (e) {
+        console.log(e);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -1422,14 +1514,83 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container-fluid" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { attrs: { align: "center" } }, [
+          _c(
+            "div",
+            { staticStyle: { width: "400px", "max-height": "400px" } },
+            [
+              _vm.board.length >= 2
+                ? _c(
+                    "table",
+                    { attrs: { border: "1", align: "center", width: "100%" } },
+                    _vm._l(_vm.board, function(row, i) {
+                      return _c(
+                        "tr",
+                        _vm._l(row, function(item, j) {
+                          return _c(
+                            "td",
+                            {
+                              staticStyle: {
+                                padding: "20px",
+                                "font-size": "30pt"
+                              },
+                              attrs: { align: "center" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.updateBoard(i, j)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(item) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Game Page")])])
+    return _c("div", { staticClass: "navbar" }, [
+      _c("h1", [_vm._v("Welcome to Tic-Tac-Toe")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("div", { staticClass: "card-title" }, [
+        _vm._v("\n                Welcome to Tic-Tac Toe.\n                "),
+        _c("span", { staticStyle: { float: "right" } }, [
+          _vm._v("Your Character is: ")
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -1453,67 +1614,167 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container-fluid" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("p", [_vm._v("You Will need to provide your name and character")]),
+        _vm._v(" "),
+        _c("form", [
+          _c("div", { staticClass: "row" }, [
+            _c("label", { staticClass: "col-md-3" }, [_vm._v("Email:")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-8" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.player.email,
+                    expression: "player.email"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "email" },
+                domProps: { value: _vm.player.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.player, "email", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("label", { staticClass: "col-md-3" }, [_vm._v("Your Name:")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-8" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.player.fullname,
+                    expression: "player.fullname"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "Fullname" },
+                domProps: { value: _vm.player.fullname },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.player, "fullname", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("label", { staticClass: "col-md-3" }, [
+              _vm._v("Your Character:")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-8" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.player.character,
+                      expression: "player.character"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.player,
+                        "character",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { selected: "", disabled: "" } }, [
+                    _vm._v("Select Character")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "X" } }, [_vm._v("X")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "O" } }, [_vm._v("O")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm.player.fullname !== "" &&
+          _vm.player.email !== "" &&
+          _vm.player.character !== ""
+            ? _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.openGame()
+                      }
+                    }
+                  },
+                  [_vm._v("Proceed")]
+                ),
+                _vm._v(" "),
+                _c("button", { staticClass: "btn btn-light" }, [
+                  _vm._v("Clear")
+                ])
+              ])
+            : _vm._e()
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container-fluid" }, [
-      _c("div", { staticClass: "navbar" }, [
-        _c("h1", [_vm._v("Welcome to Tic-Tac-Toe")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c("div", { staticClass: "card-title" }, [
-            _vm._v("\n                Welcome to Tic-Tac Toe\n            ")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c("p", [_vm._v("You Will need to provide your name and character")]),
-          _vm._v(" "),
-          _c("form", [
-            _c("div", { staticClass: "row" }, [
-              _c("label", { staticClass: "col-md-3" }, [_vm._v("Your Name:")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-8" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text", name: "Fullname" }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("label", { staticClass: "col-md-3" }, [
-                _vm._v("Your Character:")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-8" }, [
-                _c("select", { staticClass: "form-control" }, [
-                  _c("option", { attrs: { selected: "", disabled: "" } }, [
-                    _vm._v("Select Character")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("X")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "o" } }, [_vm._v("O")])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", [
-              _c("button", { staticClass: "btn btn-primary" }, [
-                _vm._v("Proceed")
-              ]),
-              _vm._v(" "),
-              _c("button", { staticClass: "btn btn-light" }, [_vm._v("Clear")])
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "navbar" }, [
+      _c("h1", [_vm._v("Welcome to Tic-Tac-Toe")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("div", { staticClass: "card-title" }, [
+        _vm._v("\n                Welcome to Tic-Tac Toe\n            ")
       ])
     ])
   }
@@ -17702,11 +17963,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************!*\
   !*** ./resources/js/store/store.js ***!
   \*************************************/
-/*! no exports provided */
+/*! exports provided: store */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
@@ -17717,7 +17979,33 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     player: {
       fullname: '',
-      character: ''
+      character: '',
+      player_id: ''
+    },
+    board: {}
+  },
+  getters: {
+    getBoardState: function getBoardState(state) {
+      return state.board;
+    },
+    getPlayer: function getPlayer(state) {
+      return state.player;
+    }
+  },
+  mutations: {
+    updateUserMut: function updateUserMut(state, data) {
+      state.player = data;
+    },
+    updateBoardMut: function updateBoardMut(state, board) {
+      state.board = board;
+    }
+  },
+  actions: {
+    updateUserAction: function updateUserAction(context, data) {
+      context.commit('updateUserMut', data);
+    },
+    updateBoardAction: function updateBoardAction(context, data) {
+      context.commit('updateBoardMut', data);
     }
   }
 });

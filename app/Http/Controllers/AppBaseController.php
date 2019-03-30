@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\Response;
 
 class AppBaseController extends Controller
 {
-    public function sendResponse($result, $message)
+    public function sendResponse($result, $message,$code=200)
     {
         return Response::json([
             'success'=>true,
             'message'=>$message,
             'data'=>$result
-        ],200);
+        ],$code);
     }
 
-    public function sendError($error, $code = 404)
+    public function sendError($error, $code = 400)
     {
         return Response::json([
             'success'=>false,

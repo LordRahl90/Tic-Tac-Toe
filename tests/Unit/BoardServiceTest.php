@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Service\BoardService;
 use App\Service\Exceptions\BadIndexException;
 use App\Service\Exceptions\InvalidCharacterException;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -94,5 +95,42 @@ class BoardServiceTest extends TestCase
         catch(InvalidCharacterException $e){
             $this->assertNull($e);
         }
+    }
+
+
+    public function testFilledBoard(){
+        $board=[
+            ["X","O","X"],
+            ["O","X","O"],
+            ["X","O","X"]
+        ];
+
+        $boardService=new BoardService();
+        $this->assertTrue($boardService->isBoardFilled($board));
+    }
+
+
+    public function testNotFilledBoard(){
+        $board=[
+            ["","O","X"],
+            ["O","","O"],
+            ["X","O","X"]
+        ];
+
+        $boardService=new BoardService();
+        $this->assertFalse($boardService->isBoardFilled($board));
+    }
+
+
+    public function testVerifyWinning(){
+        $boardService=new BoardService();
+        $board=[
+            ["O","O","X"],
+            ["O","O","X"],
+            ["","O","O"]
+        ];
+
+        $result=$boardService->verifyWinning($board);
+        Log::info($result);
     }
 }

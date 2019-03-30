@@ -21,10 +21,11 @@ class GameAPIController extends AppBaseController
                           BoardService $boardService,
                           UserService $userService){
 
+        Log::info($request->all());
 
         $v=Validator::make($request->all(),[
             'fullname'=>'required',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:users,email',
             'character'=>[
                 'required',
                 Rule::in(['O','X'])
@@ -32,7 +33,7 @@ class GameAPIController extends AppBaseController
         ]);
 
         if($v->fails()){
-            return $this->sendError($v->messages()->all(),400);
+            return $this->sendError($v->messages()->all(),200);
         }
 
         $email=$request->get('email');
@@ -48,11 +49,12 @@ class GameAPIController extends AppBaseController
             $response=[
                 'fullname'=>$fullname,
                 'player_id'=>$playerAccount->id,
-                'current_board'=>$board
+                'character'=>$playerAccount->character,
+                'board'=>$board
             ];
 
-            DB::commit();
-            return $this->sendResponse($response,'Game Started Successfully.');
+//            DB::commit();
+            return $this->sendResponse($response,'Game Started Successfully.',201);
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -60,4 +62,8 @@ class GameAPIController extends AppBaseController
         }
     }
 
+
+    public function move(Request $request){
+        return $request->all();
+    }
 }

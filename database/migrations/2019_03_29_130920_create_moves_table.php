@@ -19,6 +19,7 @@ class CreateMovesTable extends Migration
             $table->unsignedBigInteger('player_id');
             $table->integer('x_index');
             $table->integer('y_index');
+            $table->string('character');
             $table->boolean('status');
             $table->timestamps();
 

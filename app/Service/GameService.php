@@ -14,13 +14,19 @@ use App\Repository\Eloquents\GameRepository;
 class GameService
 {
     protected $gameRepository;
+    protected $boardService;
 
-    public function __construct(GameRepository $gameRepository)
+    public function __construct(GameRepository $gameRepository,BoardService $boardService)
     {
         $this->gameRepository=$gameRepository;
     }
 
 
+    /**
+     * @param $userId
+     * @return mixed
+     * @throws \Exception
+     */
     public function startGame($userId){
         $gameName=uniqid('game-');
         $newGame=$this->gameRepository->create([

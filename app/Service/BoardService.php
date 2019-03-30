@@ -30,7 +30,6 @@ class BoardService
 
         for ($i=0; $i<$x; $i++){
             for($j=0; $j<$y; $j++){
-                Log::info($i.' '.$j);
                 $board[$i][$j]="";
             }
         }
@@ -60,6 +59,85 @@ class BoardService
         }
         $board[$x][$y]=$character;
         return $board;
+    }
+
+
+    public function isBoardFilled($board){
+        foreach ($board as $i=>$x){
+            foreach($board[$i] as $j=>$y){
+                if($board[$i][$j]===""){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function verifyWinning($board){
+        $diagonal=[];
+        $reverseDiagonal=[];
+        $cols=[];
+        $rows=[];
+
+        foreach ($board as $i=>$x){
+
+            foreach ($board[$i] as $j=>$y){
+                $item=$board[$i][$j];
+                $cols[$j][]=$item;
+                $rows[$i][]=$item;
+
+                if($i==$j){
+                    $diagonal[]=$item;
+                }
+                if($i+$j==2){
+                    $reverseDiagonal[]=$item;
+                }
+            }
+        }
+
+        if(count(array_unique($diagonal))===1){
+            if($diagonal[0]!==""){
+                return [
+                    'found'=>true,
+                    'winner'=>$diagonal[0]
+                ];
+            }
+        }
+
+        if(count(array_unique($reverseDiagonal))===1){
+            if($reverseDiagonal[0]!==""){
+                return[
+                    'found'=>true,
+                    'winner'=>$reverseDiagonal[0]
+                ];
+            }
+        }
+
+        foreach ($rows as $r){
+            if(count(array_unique($r))===1){
+                if($r[0]!==""){
+                    return [
+                        'found'=>true,
+                        'winner'=>$r[0]
+                    ];
+                }
+            }
+        }
+
+        foreach ($cols as $c){
+            if(count(array_unique($c))===1){
+                if($c[0]!==""){
+                    return [
+                        'found'=>true,
+                        'winner'=>$c[0]
+                    ];
+                }
+            }
+        }
+
+        return [
+            'found'=>false
+        ];
     }
 
 }
