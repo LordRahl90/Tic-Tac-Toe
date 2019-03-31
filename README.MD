@@ -1,10 +1,10 @@
-#TIC-TAC-TOE WEB-APP.
+# TIC-TAC-TOE WEB-APP.
 This Application is a web based Tic-Tac-Toe app developed with vuejs and laravel.<br />
 Vue-JS is used for the front end. Vuex is used for the store.<br />
 
 Laravel is used for the backend mainly because it is 'batteries included.'
 
-#Pre-requisites
+# Pre-requisites
 * composer
 * nodejs/npm
 * docker/docker-compose
