@@ -11,6 +11,7 @@ namespace App\Service;
 
 use App\Repository\Eloquents\UserRepository;
 use App\Service\Exceptions\GameException;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -40,17 +41,20 @@ class UserService
      * @throws GameException
      */
     public function startGame($fullname,$email,$character,$computerCharacter){
-        $newUser=$this->userRepository->firstOrCreate([
-            'email'=>$email
-        ],[
-            'email'=>$email,
-            'name'=>$fullname
-        ]);
+        $user=$this->userRepository->findBy('email',$email);
+        if(count($user)<=0){
+            $newUser=$this->userRepository->create([
+                'email'=>$email,
+                'name'=>$fullname
+            ]);
 
-        if(!$newUser){
-            throw new GameException("Error occurred while creating user");
+            if(!$newUser){
+                throw new GameException("Error occurred while creating user");
+            }
+
+        }else{
+            $newUser=$user->first();
         }
-
         //Create a new game
         $newGame=$this->gameService->startGame($newUser->id);
 

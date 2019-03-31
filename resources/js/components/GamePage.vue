@@ -28,7 +28,7 @@
 
             <div class="card-footer">
                 <button type="button" @click="restart()" class="btn btn-info">Restart</button>
-                <button type="button" class="btn btn-danger">Restart</button>
+                <button type="button" @click="logout()" class="btn btn-danger">Exit</button>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
                     'y':y,
                     'board':currentBoard
                 }).then(function(responseData){
-                    console.log(responseData.data.data.board);
+                    // console.log(responseData.data.data.board);
 
                     let data=responseData.data.data;
 
@@ -94,8 +94,12 @@
                     self.$store.dispatch('updateBoardAction',respData.board);
                     self.board=self.$store.getters.getBoardState;
                     self.$store.dispatch('changePlayerID',respData.player_id);
-                    console.log(respData.player_id);
+                    // console.log(respData.player_id);
                 });
+            },
+            logout(){
+                this.$store.dispatch('logout');
+                this.$router.push('/');
             },
             forceRenderer(){
                 this.componentIKey+=1;

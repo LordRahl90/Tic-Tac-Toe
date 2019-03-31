@@ -40,7 +40,10 @@
                     </div>
 
                     <div v-if="player.fullname!=='' && player.email!=='' && player.character!=='' ">
-                        <button type="button" class="btn btn-primary" @click="openGame()">Proceed</button>
+                        <button type="button" class="btn btn-primary" @click="openGame()" :disabled="loading">
+                            <span v-if="loading">Logging In</span>
+                            <span v-if="!loading">Proceeds</span>
+                        </button>
                         <button class="btn btn-light">Clear</button>
                     </div>
                 </form>
@@ -53,6 +56,7 @@
     export default {
         data:function(){
             return{
+                loading:false,
                 player:{
                     email:'',
                     fullname:'',
@@ -63,6 +67,7 @@
         methods:{
             openGame(){
                 let self=this;
+                this.loading=true;
                 let url='/api/v1/start-game';
                 axios.post(url,this.player).then(function(responseData){
                     if(responseData.status!=201){

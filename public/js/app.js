@@ -214,7 +214,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'y': y,
         'board': currentBoard
       }).then(function (responseData) {
-        console.log(responseData.data.data.board);
+        // console.log(responseData.data.data.board);
         var data = responseData.data.data;
         self.$store.dispatch('updateBoardAction', responseData.data.data.board);
         self.board = self.$store.getters.getBoardState; // self.$forceUpdate();
@@ -244,9 +244,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         self.$store.dispatch('updateBoardAction', respData.board);
         self.board = self.$store.getters.getBoardState;
-        self.$store.dispatch('changePlayerID', respData.player_id);
-        console.log(respData.player_id);
+        self.$store.dispatch('changePlayerID', respData.player_id); // console.log(respData.player_id);
       });
+    },
+    logout: function logout() {
+      this.$store.dispatch('logout');
+      this.$router.push('/');
     },
     forceRenderer: function forceRenderer() {
       this.componentIKey += 1;
@@ -332,9 +335,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      loading: false,
       player: {
         email: '',
         fullname: '',
@@ -345,6 +352,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     openGame: function openGame() {
       var self = this;
+      this.loading = true;
       var url = '/api/v1/start-game';
       axios.post(url, this.player).then(function (responseData) {
         if (responseData.status != 201) {
@@ -1651,8 +1659,16 @@ var render = function() {
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-danger", attrs: { type: "button" } },
-          [_vm._v("Restart")]
+          {
+            staticClass: "btn btn-danger",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.logout()
+              }
+            }
+          },
+          [_vm._v("Exit")]
         )
       ])
     ])
@@ -1814,14 +1830,18 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
+                    attrs: { type: "button", disabled: _vm.loading },
                     on: {
                       click: function($event) {
                         return _vm.openGame()
                       }
                     }
                   },
-                  [_vm._v("Proceed")]
+                  [
+                    _vm.loading ? _c("span", [_vm._v("Logging In")]) : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.loading ? _c("span", [_vm._v("Proceeds")]) : _vm._e()
+                  ]
                 ),
                 _vm._v(" "),
                 _c("button", { staticClass: "btn btn-light" }, [
@@ -18078,6 +18098,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     updatePlayerIDMut: function updatePlayerIDMut(state, id) {
       state.player.player_id = id;
+    },
+    logoutMut: function logoutMut(state) {
+      state.board = null;
+      state.player = {
+        fullname: '',
+        character: '',
+        player_id: ''
+      };
     }
   },
   actions: {
@@ -18090,6 +18118,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     changePlayerID: function changePlayerID(context, id) {
       context.commit('updatePlayerIDMut', id);
+    },
+    logout: function logout(context) {
+      context.commit('logoutMut');
     }
   }
 });

@@ -1,7 +1,15 @@
 function success(msg){
-    alert(msg);
+    swal({
+        title:'TicTacToe',
+        text: msg,
+        icon:'success'
+    });
 }
 
 function error(msg){
-    alert(msg);
+    swal({
+        title:'TicTacToe',
+        text: msg,
+        icon:'error'
+    });
 }

@@ -1,0 +1,8 @@
+APP_DEBUG=true
+DB_HOST=database
+DB_DATABASE=tic_tac_toe
+DB_USERNAME=local_user
+DB_PASSWORD=local_password_01@
+REDIS_HOST=redis
+SESSION_DRIVER=redis
+CACHE_DRIVER=redis

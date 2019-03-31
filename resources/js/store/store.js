@@ -37,6 +37,14 @@ export const store=new Vuex.Store({
         },
         updatePlayerIDMut: function(state,id){
             state.player.player_id=id;
+        },
+        logoutMut(state){
+            state.board=null;
+            state.player={
+                fullname:'',
+                character:'',
+                player_id:''
+            }
         }
     },
     actions:{
@@ -49,6 +57,9 @@ export const store=new Vuex.Store({
         },
         changePlayerID: function (context,id) {
             context.commit('updatePlayerIDMut',id);
+        },
+        logout(context){
+            context.commit('logoutMut');
         }
     }
 });

@@ -138,4 +138,8 @@ class GameAPITest extends TestCase
         $this->assertEquals('Your Turn...',$responseData->message);
         Log::info($responseData->message);
     }
+
+    public function testRestart(){
+
+    }
 }
