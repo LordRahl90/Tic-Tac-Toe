@@ -39,7 +39,11 @@ export const store=new Vuex.Store({
             state.player.player_id=id;
         },
         logoutMut(state){
-            state.board=null;
+            state.board=[
+                ["","",""],
+                ["","",""],
+                ["","",""],
+            ];
             state.player={
                 fullname:'',
                 character:'',

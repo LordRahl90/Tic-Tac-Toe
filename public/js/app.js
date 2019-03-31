@@ -18100,7 +18100,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       state.player.player_id = id;
     },
     logoutMut: function logoutMut(state) {
-      state.board = null;
+      state.board = [["", "", ""], ["", "", ""], ["", "", ""]];
       state.player = {
         fullname: '',
         character: '',
