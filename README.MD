@@ -19,7 +19,7 @@ To Setup The Application, Follow the following steps.
 * copy `.envs/local/.app.env.example` to `.envs/local/.app.env` and set the variables accordingly.
 * copy `.envs/local/.mysql.env.example` to `.envs/local/.mysql.env.example` and also set the values accordingly.
     <br />Please make sure that the database values match, else the application won't connect to the database
-* run `docker-compose up -d` to start the system (this might take a while for the first run).
+* run `make start` to start the system (this might take a while for the first run).
 * run `make migrate` once the previous installation is completed. This migrate all the database tables, and also seeds the default computer player
 
 

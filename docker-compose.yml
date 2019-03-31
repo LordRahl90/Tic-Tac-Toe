@@ -12,7 +12,7 @@ services:
       - ./:/var/www/html
 
     env_file:
-      - .envs/local/.app_env
+      - .envs/local/.app.env
     depends_on:
       - redis
       - database
