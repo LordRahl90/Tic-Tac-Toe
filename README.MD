@@ -13,7 +13,9 @@ To Setup The Application, Follow the following steps.
 * docker
 * docker-compose
 
-# setup 
+# Setup 
+
+To setup the application using docker, please follow the steps below: <br />
 
 * run `git clone https://github.com/LordRahl90/Tic-Tac-Toe`.
 * run `cd Tic-Tac-Toe`
@@ -57,6 +59,7 @@ For development/contributions, make sure `composer`,`node` and `npm` are install
 * run `composer install` to install all the dependencies.
 * run `npm install` to install the npm dependencies.
 * run `php artisan key:generate` to generate the encryption key.
+* run `php artisan config:cache` to generate the encryption key.
 * run `php artisan migrate --seed` to generate the migrations and seed the default computer player.
 * run `php artisan serve` To run the application on `localhost:8000`
 
