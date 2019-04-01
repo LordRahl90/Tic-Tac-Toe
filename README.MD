@@ -22,6 +22,7 @@ To Setup The Application, Follow the following steps.
 * run `nano .envs/local/.app.env` to use the database settings for the application
 NB: Please make sure that the database values match, else the application won't connect to the database <br />
 * run `make start` to start the system (this might take a while for the first run).
+* visit `localhost:9901` in your browser to access the application.
 * to stop the application, run `make stop`
 
 # Useful Commands
@@ -49,6 +50,7 @@ For development/contributions, make sure `composer`,`node` and `npm` are install
 * run `php artisan migrate --seed` to generate the migrations and seed the default computer player.
 * run `php artisan serve` To run the application on `localhost:8000`
 
+To make any change to the UI during development, you may want to run `npm run watch` as this uses laravel mix to generate assets.
 
 
 The default port is 9901, however, it can be changed in the `docker-compose.yml` file to any available port.<br />
