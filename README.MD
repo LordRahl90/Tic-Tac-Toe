@@ -14,10 +14,10 @@ To Setup The Application, Follow the following steps.
 * docker-compose
 
 
-* Clone the project from the repo.
-* run `cd tictactoe`
+* run `git clone https://github.com/LordRahl90/Tic-Tac-Toe`.
+* run `cd Tic-Tac-Toe`
+* run `cp .envs/local/.mysql.env.example .envs/local/.mysql.env` and also set the variables accordingly.
 * run `cp .envs/local/.app.env.example .envs/local/.app.env`  and set the variables accordingly.
-* run `cp .envs/local/.mysql.env.example .envs/local/.mysql.env.example` and also set the values accordingly.
 NB: Please make sure that the database values match, else the application won't connect to the database <br />
 * run `make start` to start the system (this might take a while for the first run).
 * to stop the application, run `make stop`
@@ -27,6 +27,7 @@ NB: Please make sure that the database values match, else the application won't 
 * `make fresh-migrate` to refresh the database migrations.
 * `make clear-cache` to clear the config cache
 * `make stop` to kill the application
+* `make restart` to restart the application without refreshing the database.
 
 
 # Regular/Development
@@ -37,8 +38,8 @@ NB: Please make sure that the database values match, else the application won't 
 * nodejs/npm
 
 For development/contributions, make sure `composer`,`node` and `npm` are installed.
-* Clone the project from the repo.
-* run `cd tictactoe`
+* run `git clone https://github.com/LordRahl90/Tic-Tac-Toe`.
+* run `cd Tic-Tac-Toe`
 * update `cp .env.example .env` and update with valid db credentials
 * run `composer install` to install all the dependencies.
 * run `npm install` to install the npm dependencies.
