@@ -23,9 +23,10 @@ RUN composer install
 
 #RUN chmod -R 777 /storage /public
 
-RUN chown -R www-data:www-data /var/www/html && a2enmod rewrite && service apache2 restart
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/bootstrap/cache /var/www/html && a2enmod rewrite && service apache2 restart
 
 #Lets clean the docker application.
 RUN cp .env.example .env
 RUN php artisan key:generate
 RUN php artisan config:cache
+RUN php artisan optimize
