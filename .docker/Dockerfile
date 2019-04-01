@@ -21,7 +21,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer install
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html && a2enmod rewrite && service apache2 restart
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/bootstrap/cache /var/www/html && a2enmod rewrite && service apache2 restart
+
+RUN chmod -R 777 /storage
 
 #Lets clean the docker application.
 RUN cp .env.example .env

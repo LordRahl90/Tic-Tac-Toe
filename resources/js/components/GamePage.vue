@@ -75,6 +75,9 @@
                         success(responseData.data.message);
                         return;
                     }
+                }).catch(e=>{
+                    error('An error occurred '+e.message);
+                    return;
                 });
             },
             restart(){

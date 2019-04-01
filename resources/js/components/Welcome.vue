@@ -90,6 +90,7 @@
                     self.$router.push('/game');
                 }).catch(e=>{
                     console.log(e);
+                    error('An error occurred... '+e.message);
                 });
             }
         }
