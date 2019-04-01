@@ -2,6 +2,7 @@ APP_ENV_FILE=.envs/local/.app.env
 MYSQL_ENV_FILE=.envs/local/.mysql.env
 TRUE=1
 FALSE=0
+COMPOSE=docker-compose
 
 start:
 	@if [ -a $(MYSQL_ENV_FILE) ]; then \
@@ -38,3 +39,4 @@ restart:
 hard-restart:
 	docker-compose kill
 	docker-compose up -d --build
+	docker-compose exec app php artisan config:cache
