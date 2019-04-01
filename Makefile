@@ -36,3 +36,4 @@ restart:
 hard-restart:
 	docker-compose kill
 	docker-compose up -d --build
+	make fresh-migrate
