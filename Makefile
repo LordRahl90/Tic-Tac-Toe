@@ -32,3 +32,7 @@ stop:
 restart:
 	docker-compose kill
 	docker-compose up -d
+
+hard-restart:
+	docker-compose kill
+	docker-compose up -d --build
