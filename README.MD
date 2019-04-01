@@ -13,16 +13,17 @@ To Setup The Application, Follow the following steps.
 * docker
 * docker-compose
 
+# setup 
 
 * run `git clone https://github.com/LordRahl90/Tic-Tac-Toe`.
 * run `cd Tic-Tac-Toe`
 * run `cp .envs/local/.mysql.env.example .envs/local/.mysql.env` and also set the variables accordingly.
 * run `nano .envs/local/.mysql.env` to set the environment variables for the database
-* run `cp .envs/local/.app.env.example .envs/local/.app.env`  and set the variables accordingly.
     * set `MYSQL_DATABASE=prefered_db_name`
     * set `MYSQL_USER=preferred_db_username`
     * set `MYSQL_ROOT_PASSWORD=preferred_db_password`
     * set `MYSQL_ALLOW_EMPTY_PASSWORD=yes` or `MYSQL_ALLOW_EMPTY_PASSWORD=no` as the case may be.
+* run `cp .envs/local/.app.env.example .envs/local/.app.env`  and set the variables accordingly.
 * run `nano .envs/local/.app.env` to use the database settings for the application <br />
     * set `DB_DATABASE=mysql_db_name`
     * set `DB_USERNAME=mysql_username`
