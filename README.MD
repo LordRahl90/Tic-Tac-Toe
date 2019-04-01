@@ -7,7 +7,7 @@ Laravel is used for the backend mainly because it is 'batteries included.'
 
 
 To Setup The Application, Follow the following steps.
-# With Docker
+# With Docker (Preferred)
 
 # Pre-requisite.
 * docker
@@ -17,7 +17,9 @@ To Setup The Application, Follow the following steps.
 * run `git clone https://github.com/LordRahl90/Tic-Tac-Toe`.
 * run `cd Tic-Tac-Toe`
 * run `cp .envs/local/.mysql.env.example .envs/local/.mysql.env` and also set the variables accordingly.
+* run `nano .envs/local/.mysql.env` to set the environment variables for the database
 * run `cp .envs/local/.app.env.example .envs/local/.app.env`  and set the variables accordingly.
+* run `nano .envs/local/.app.env` to use the database settings for the application
 NB: Please make sure that the database values match, else the application won't connect to the database <br />
 * run `make start` to start the system (this might take a while for the first run).
 * to stop the application, run `make stop`
