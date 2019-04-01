@@ -62,4 +62,10 @@ To make any change to the UI during development, you may want to run `npm run wa
 
 
 The default port is 9901, however, it can be changed in the `docker-compose.yml` file to any available port.<br />
-To Stop the application, run `make stop`
+Also, to mount the working folder to the image, you should uncomment 
+`
+    volumes:
+      - ./:/var/www/html
+ `
+within the `docker-compose.yml`
+
