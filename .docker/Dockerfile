@@ -21,8 +21,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer install
 
-#RUN chmod -R 777 /storage /public
-
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/bootstrap/cache /var/www/html && a2enmod rewrite && service apache2 restart
 
 #Lets clean the docker application.

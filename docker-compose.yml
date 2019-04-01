@@ -8,8 +8,8 @@ services:
       dockerfile: ./.docker/Dockerfile
     ports:
       - 9901:80
-    volumes:
-      - ./:/var/www/html
+#    volumes:
+#      - ./:/var/www/html
 
     env_file:
       - .envs/local/.app.env
