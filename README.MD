@@ -31,6 +31,7 @@ To Setup The Application, Follow the following steps.
     * leave the rest as default. <br />
     * NB: Please make sure that the `mysql_*` variable matches with the , else the application won't connect to the database <br />
 * run `make start` to start the system (this might take a while for the first run).
+* run `make migrate` to run the migration and seed the first computer player.
 * visit `localhost:9901` in your browser to access the application.
 * to stop the application, run `make stop`
 

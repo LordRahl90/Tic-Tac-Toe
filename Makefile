@@ -7,7 +7,6 @@ start:
 	@if [ -a $(MYSQL_ENV_FILE) ]; then \
     	docker-compose up -d ; \
 	    docker-compose exec app php artisan config:cache ; \
-	    docker-compose exec app php artisan migrate --seed; \
 	else \
 		echo "No Application config file found.\nPlease run 'cp .envs/local/.mysql.env.example .envs/local/.mysql.env' and set the values"; \
 	fi;

@@ -8,6 +8,10 @@ services:
       dockerfile: ./.docker/Dockerfile
     ports:
       - 9901:80
+
+    links:
+      - database
+      - redis
 #    volumes:
 #      - ./:/var/www/html
 
