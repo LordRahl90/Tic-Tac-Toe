@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="f86359ae-0bae-484d-8a38-0b69748f176d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
+=======
+    <list default="true" id="f86359ae-0bae-484d-8a38-0b69748f176d" name="Default Changelist" comment="" />
+>>>>>>> 8cbd30c3284844bd842b39f9a22a333ae75a325c
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -382,8 +386,12 @@
       <option name="presentableId" value="Default" />
       <updated>1553856008162</updated>
       <workItem from="1553856009559" duration="60473000" />
+<<<<<<< HEAD
       <workItem from="1554114767491" duration="18101000" />
       <workItem from="1554198120535" duration="997000" />
+=======
+      <workItem from="1554114767491" duration="17375000" />
+>>>>>>> 8cbd30c3284844bd842b39f9a22a333ae75a325c
     </task>
     <servers />
   </component>
@@ -420,7 +428,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="79590000" />
+=======
+    <option name="totallyTimeSpent" value="77848000" />
+>>>>>>> 8cbd30c3284844bd842b39f9a22a333ae75a325c
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="976" extended-state="0" />
