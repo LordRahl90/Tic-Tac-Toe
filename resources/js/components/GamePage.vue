@@ -51,8 +51,14 @@
                 let player=this.$store.getters.getPlayer;
                 let currentBoard=this.$store.getters.getBoardState;
                 let self=this;
+
+                if(currentBoard[x][y]!==null || currentBoard[x][y]!=""){
+                    error("Invalid Move");
+                    return;
+                }
                 // currentBoard[x][y]=player.character;
                 currentBoard[x][y]=player.character;
+
 
                 //lets send the coord out.
                 axios.post('/api/v1/move',{
