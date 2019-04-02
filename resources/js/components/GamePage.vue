@@ -63,6 +63,11 @@
                 }).then(function(responseData){
                     // console.log(responseData.data.data.board);
 
+                    if(!responseData.data.success){
+                        error(responseData.data.message);
+                        return;
+                    }
+
                     let data=responseData.data.data;
 
 
