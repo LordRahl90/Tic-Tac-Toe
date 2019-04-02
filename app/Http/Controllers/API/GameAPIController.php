@@ -62,7 +62,7 @@ class GameAPIController extends AppBaseController
         }
         catch(\Exception $ex){
             DB::rollBack();
-            return $this->sendError($ex->getMessage(),500);
+            return $this->sendError($ex->getMessage(),200);
         }
     }
 
@@ -164,7 +164,7 @@ class GameAPIController extends AppBaseController
         catch (\Exception $ex){
             DB::rollBack();
             Log::info($ex);
-            return $this->sendError($ex->getMessage(),500);
+            return $this->sendError($ex->getMessage(),200);
         }
     }
 
@@ -198,7 +198,7 @@ class GameAPIController extends AppBaseController
        }
        catch (\Exception $ex){
            Log::info($ex);
-           return $this->sendError($ex->getMessage(),500);
+           return $this->sendError($ex->getMessage(),200);
        }
     }
 }

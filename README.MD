@@ -31,7 +31,7 @@ To setup the application using docker, please follow the steps below: <br />
     * set `DB_USERNAME=mysql_username`
     * set `DB_PASSWORD=mysql_password`
     * leave the rest as default. <br />
-    * NB: Please make sure that the `mysql_*` variable matches with the , else the application won't connect to the database <br />
+    * NB: Please make sure that the `mysql_*` variable matches with the `prefered_db_*` variables you declared earlier in `.envs/local/.mysql.env`, else the application won't connect to the database <br />
 * run `make start` to start the system (this might take a while for the first run).
 * run `make migrate` to run the migration and seed the first computer player.
 * visit `localhost:9901` in your browser to access the application.
