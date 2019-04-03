@@ -23,7 +23,8 @@ To setup the application using docker, please follow the steps below: <br />
 * run `nano .envs/local/.mysql.env` to set the environment variables for the database
     * set `MYSQL_DATABASE=prefered_db_name`
     * set `MYSQL_USER=preferred_db_username`
-    * set `MYSQL_ROOT_PASSWORD=preferred_db_password`
+    * set `MYSQL_PASSWORD=preferred_db_password`
+    * set `MYSQL_ROOT_PASSWORD=preferred_db_root_password`
     * set `MYSQL_ALLOW_EMPTY_PASSWORD=yes` or `MYSQL_ALLOW_EMPTY_PASSWORD=no` as the case may be.
 * run `cp .envs/local/.app.env.example .envs/local/.app.env`  and set the variables accordingly.
 * run `nano .envs/local/.app.env` to use the database settings for the application <br />
@@ -43,6 +44,7 @@ To setup the application using docker, please follow the steps below: <br />
 * `make clear-cache` to clear the config cache
 * `make stop` to kill the application
 * `make restart` to restart the application without refreshing the database.
+* `make hard-restart` to re-build the docker image.
 
 
 # Regular/Development

@@ -40,3 +40,5 @@ hard-restart:
 	docker-compose kill
 	docker-compose up -d --build
 	docker-compose exec app php artisan config:cache
+	docker-compose exec app php artisan migrate:fresh --seed
+
